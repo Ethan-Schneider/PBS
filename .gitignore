@@ -1,3 +1,11 @@
-cmake*
 .idea
+cmake-*
+CMakeFiles
+*.cmake
+*.a
+*.so
+Makefile
+CMakeCache.txt
+paths.txt
+pbs
 *.csv
