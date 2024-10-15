@@ -67,3 +67,13 @@ int main(int argc, char** argv)
 	return 0;
 
 }
+
+vector<vector<tuple<int,int>>> pymain(string& map, int k, int t, double suboptimality, std::vector<std::tuple<int, int>> agent_start_locations = {}, std::vector<std::tuple<int, int>> agent_goal_locations = {})
+{
+	// TODO: Update Instance load map and agents file, 
+	// Instance: Loadagentmap, loadagentlocations,etc. '
+	Instance instance(map, agent_actual_file, k, agent_start_locations, agent_goal_locations);
+	cout << "In PBS" << endl;
+	vector<vector<tuple<int,int>>> a = {};
+	return a;
+}
