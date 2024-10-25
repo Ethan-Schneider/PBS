@@ -13,8 +13,9 @@ public:
 	// enum valid_moves_t { NORTH, EAST, SOUTH, WEST, WAIT_MOVE, MOVE_COUNT };  // MOVE_COUNT is the enum's size
 
 	Instance(){}
-	Instance(const string& map_fname, const string& agent_fname, 
-		int num_of_agents = 0, int num_of_rows = 0, int num_of_cols = 0, int num_of_obstacles = 0, int warehouse_width = 0);
+	Instance(const string& map_fname, const string& agent_fname, int num_of_agents = 0, 
+	const std::vector<std::tuple<int, int>> agent_start_locations = {}, const std::vector<std::tuple<int, int>> agent_goal_locations = {}, 
+	int num_of_rows = 0, int num_of_cols = 0, int num_of_obstacles = 0, int warehouse_width = 0);
 
 
 	void printAgents() const;
@@ -77,6 +78,7 @@ private:
 	  void saveMap() const;
 
 	  bool loadAgents();
+	  bool loadAgentsLocations(std::vector<std::tuple<int, int>> agent_start_locations, std::vector<std::tuple<int, int>> agent_goal_locations);
 	  void saveAgents() const;
 
 	  void generateConnectedRandomGrid(int rows, int cols, int obstacles); // initialize new [rows x cols] map with random obstacles

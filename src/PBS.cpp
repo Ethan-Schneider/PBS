@@ -375,6 +375,25 @@ void PBS::printPaths() const
 	}
 }
 
+vector<vector<tuple<int,int>>> PBS::returnPaths() const
+{
+	vector<vector<tuple<int, int>>> agent_paths;
+
+	for (int i = 0; i < num_of_agents; i++)
+	{
+		vector<tuple<int, int>> agent_path;
+		// Unsure if this is necessary or not 
+		agent_path.reserve(1000);
+		for (const auto & t : *paths[i])
+		{
+			agent_path.push_back(std::make_tuple(search_engines[0]->instance.getRowCoordinate(t.location), search_engines[0]->instance.getColCoordinate(t.location)));
+		}
+		agent_paths.push_back(agent_path);
+	}
+
+	return agent_paths;
+}
+
 void PBS::printPriorityGraph() const
 {
     cout << "Priority graph:";

@@ -6,8 +6,9 @@
 
 int RANDOM_WALK_STEPS = 100000;
 
-Instance::Instance(const string& map_fname, const string& agent_fname, 
-	int num_of_agents, int num_of_rows, int num_of_cols, int num_of_obstacles, int warehouse_width):
+Instance::Instance(const string& map_fname, const string& agent_fname,
+int num_of_agents, const std::vector<std::tuple<int, int>> agent_start_locations, const std::vector<std::tuple<int, int>> agent_goal_locations, 
+int num_of_rows, int num_of_cols, int num_of_obstacles, int warehouse_width):
 	map_fname(map_fname), agent_fname(agent_fname), num_of_agents(num_of_agents)
 {
 	bool succ = loadMap();
@@ -26,7 +27,15 @@ Instance::Instance(const string& map_fname, const string& agent_fname,
 		}
 	}
 
-	succ = loadAgents();
+	if (!agent_start_locations.empty())
+	{
+		succ = loadAgentsLocations(agent_start_locations, agent_goal_locations);
+	}
+	else
+	{
+		succ = loadAgents();
+	}
+
 	if (!succ)
 	{
 		if (num_of_agents > 0)
@@ -280,11 +289,16 @@ bool Instance::loadMap()
 	}
 	map_size = num_of_cols * num_of_rows;
 	my_map.resize(map_size, false);
+	//Read empty line before loading map data
+	getline(myfile, line);
 	// read map (and start/goal locations)
 	for (int i = 0; i < num_of_rows; i++) {
 		getline(myfile, line);
 		for (int j = 0; j < num_of_cols; j++) {
-			my_map[linearizeCoordinate(i, j)] = (line[j] != '.');
+			if (line[j] == '@')
+			{
+				my_map[linearizeCoordinate(i, j)] = (line[j] == ('@'));
+			}
 		}
 	}
 	myfile.close();
@@ -410,9 +424,25 @@ bool Instance::loadAgents()
 			goal_locations[i] = linearizeCoordinate(row, col);
 		}
 	}
+
 	myfile.close();
 	return true;
 
+}
+
+bool Instance::loadAgentsLocations(std::vector<std::tuple<int, int>> agent_start_locations, std::vector<std::tuple<int, int>> agent_goal_locations)
+{
+	start_locations.resize(num_of_agents);
+	goal_locations.resize(num_of_agents);
+
+	for (int i = 0; i<num_of_agents; i++)
+	{
+		std::tuple<int, int> a = agent_goal_locations[i];
+		start_locations[i] = linearizeCoordinate(get<0>(agent_start_locations[i]), get<1>(agent_start_locations[i]));
+		goal_locations[i] = linearizeCoordinate(get<0>(agent_goal_locations[i]), get<1>(agent_goal_locations[i]));
+	}
+
+	return true;
 }
 
 

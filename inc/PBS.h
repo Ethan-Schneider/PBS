@@ -45,6 +45,7 @@ public:
 	void saveResults(const string &fileName, const string &instanceName) const;
 	void saveCT(const string &fileName) const; // write the CT to a file
     void savePaths(const string &fileName) const; // write the paths to a file
+	vector<vector<tuple<int,int>>> returnPaths() const;
 	void clear(); // used for rapid random  restart
 private:
 	conflict_selection conflict_seletion_rule;

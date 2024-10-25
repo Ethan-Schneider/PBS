@@ -54,6 +54,7 @@ int main(int argc, char** argv)
     PBS pbs(instance, vm["sipp"].as<bool>(), vm["screen"].as<int>());
     // run
     double runtime = 0;
+	cout << "cutoffTime: " << vm["cutoffTime"].as<double>() << endl; 
     pbs.solve(vm["cutoffTime"].as<double>());
     if (vm.count("output"))
         pbs.saveResults(vm["output"].as<string>(), vm["agents"].as<string>());
@@ -72,8 +73,42 @@ vector<vector<tuple<int,int>>> pymain(string& map, int k, int t, double suboptim
 {
 	// TODO: Update Instance load map and agents file, 
 	// Instance: Loadagentmap, loadagentlocations,etc. '
+	string agent_dummy_file = "dummy";
+	string agent_actual_file = "random-32-32-20-random-1.scen";
+
+	srand((int)time(0));
 	Instance instance(map, agent_actual_file, k, agent_start_locations, agent_goal_locations);
-	cout << "In PBS" << endl;
-	vector<vector<tuple<int,int>>> a = {};
-	return a;
+	srand(0);
+
+	PBS pbs(instance, 0, 0);
+
+	// run
+	double runtime = 0;
+	pbs.solve(60);
+
+	vector<vector<tuple<int,int>>> paths;
+	if (pbs.solution_found)
+	{
+		paths = pbs.returnPaths();
+	}
+	else
+	{
+		paths = {};
+		cout << "Unable to find solution for goals: " << endl;
+		// Print agent_start locations
+		cout << "Agent Start Locations" << endl;
+		for (std::tuple<int, int> i: agent_start_locations)
+		{
+			cout << "(" << get<0>(i) << ", " << get<1>(i) << ")" << endl;
+		}
+
+		cout << "Agent Goal Locations" << endl;
+		// Print agent_goal locations
+		for (std::tuple<int, int> i: agent_goal_locations)
+		{
+			cout << "(" << get<0>(i) << ", " << get<1>(i) << ")" << endl;
+		}
+	}
+	pbs.clearSearchEngines();
+	return paths;
 }
