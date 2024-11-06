@@ -54,7 +54,6 @@ int main(int argc, char** argv)
     PBS pbs(instance, vm["sipp"].as<bool>(), vm["screen"].as<int>());
     // run
     double runtime = 0;
-	cout << "cutoffTime: " << vm["cutoffTime"].as<double>() << endl; 
     pbs.solve(vm["cutoffTime"].as<double>());
     if (vm.count("output"))
         pbs.saveResults(vm["output"].as<string>(), vm["agents"].as<string>());
@@ -84,7 +83,7 @@ vector<vector<tuple<int,int>>> pymain(string& map, int k, int t, double suboptim
 
 	// run
 	double runtime = 0;
-	pbs.solve(60);
+	pbs.solve(200);
 
 	vector<vector<tuple<int,int>>> paths;
 	if (pbs.solution_found)
